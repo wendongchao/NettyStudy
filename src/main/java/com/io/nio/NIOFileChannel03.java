@@ -1,6 +1,5 @@
 package com.io.nio;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.ByteBuffer;
