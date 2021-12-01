@@ -7,24 +7,26 @@ import java.nio.channels.SocketChannel;
 import java.util.Scanner;
 
 /**
+ * 客户端
  * @Author wendongchao
  * @Date 2021/11/10 22:58
  */
 public class NIOClient {
     public static void main(String[] args) throws IOException {
-        //得到一个网络通道
+        //1、得到一个网络通道
         SocketChannel socketChannel = SocketChannel.open();
-        //非阻塞
+        //2、设置非阻塞
         socketChannel.configureBlocking(false);
-        //提供服务器的ip和端口
+        //3、提供服务器的ip和端口
         InetSocketAddress inetSocketAddress = new InetSocketAddress("127.0.0.1", 6666);
-        //链接服务器
+        //4、链接服务器
         if(!socketChannel.connect(inetSocketAddress)){
             while (!socketChannel.finishConnect()){
                 System.out.println("链接需要时间，客户端不会阻塞");
             }
         }
 //        String str = "hello world!";
+        // 输入内容
         Scanner scanner = new Scanner(System.in);
         String str;
         ByteBuffer buffer = ByteBuffer.allocate(1024);
