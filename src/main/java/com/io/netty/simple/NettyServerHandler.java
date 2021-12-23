@@ -1,8 +1,11 @@
 package com.io.netty.simple;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.ChannelPipeline;
 import io.netty.util.CharsetUtil;
 
 import java.util.concurrent.TimeUnit;
@@ -26,24 +29,56 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        //异步机制，阻塞的任务会放在taskQueue
-        ctx.channel().eventLoop().execute(new Runnable() {
-            @Override
-            public void run() {
-                try { TimeUnit.SECONDS.sleep(10); } catch (InterruptedException e) { e.printStackTrace(); }
-                ctx.writeAndFlush(Unpooled.copiedBuffer("hello,客户端2...",CharsetUtil.UTF_8));//将数据写入到缓存，并刷新
-            }
-        });
-        System.out.println("go on...");
-//        System.out.println("server : " + ctx);
-////        System.out.println("查看channel 和 pipeLine 的关系");
+
+//        System.out.println("服务器读取线程："+Thread.currentThread().getName());
+//        System.out.println("server ctx ="+ctx);
+//        System.out.println("查看channel 和 pipeLine 的关系");
 //        Channel channel = ctx.channel();
 //        ChannelPipeline pipeline = ctx.pipeline();
 //        //将msg转为ByteBuf
-//        //ByteBuf是netty提供的
+//        //ByteBuf是netty提供的，不是NIO的ByteBuffer
 //        ByteBuf buf = (ByteBuf) msg;
 //        System.out.println("客户端发送的数据：" + buf.toString(CharsetUtil.UTF_8));
 //        System.out.println("客户端地址：" + ctx.channel().remoteAddress());
+
+        // 有一个耗时任务 -> 异步执行 -> 提交该channel 对应的NIOEventLoop 的taskQueue中
+
+//        Thread.sleep(10 * 1000);
+//        ctx.writeAndFlush(Unpooled.copiedBuffer("hello,客户端2...",CharsetUtil.UTF_8));
+//        System.out.println("go on...");
+
+        // 解决方案1：用户程序自定义的普通任务
+
+        //异步机制，阻塞的任务会放在taskQueue
+//        ctx.channel().eventLoop().execute(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    Thread.sleep(10 * 1000);
+//                ctx.writeAndFlush(Unpooled.copiedBuffer("hello,客户端2...",CharsetUtil.UTF_8));//将数据写入到缓存，并刷新
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//
+//        System.out.println("go on...");
+
+        // 解决方案2： 用户自定义定时任务 -> 该任务放到 scheduleTaskQueue中
+        ctx.channel().eventLoop().schedule(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(10 * 1000);
+                    ctx.writeAndFlush(Unpooled.copiedBuffer("hello,客户端2...",CharsetUtil.UTF_8));//将数据写入到缓存，并刷新
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, 5, TimeUnit.SECONDS);
+
+        System.out.println("go on...");
+
     }
     //数据读取完，
     @Override

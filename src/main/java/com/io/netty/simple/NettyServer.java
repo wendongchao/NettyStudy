@@ -10,7 +10,12 @@ public class NettyServer {
     public static void main(String[] args) throws Exception {
         //BossGroup and workerGroup
         //创建两个线程组，都是循环
-        //bossgroup 和 workergroup 含有子线程（EventLoop）的个数
+        //
+        //1. 创建两个线程组 bossgroup workergroup
+        //2. bossgroup 只是处理连接请求，真正的和客户端业务处理，会交给workergroup完成
+        //3. 两个都是无限循环
+        //4. bossgroup 和 workergroup 含有子线程（EventLoop）的个数，
+        //   默认是CPU核数*2
         EventLoopGroup bossgroup = new NioEventLoopGroup();     //处理连接请求，其余交给workergroup处理
         EventLoopGroup workergroup = new NioEventLoopGroup();   //
         try {
@@ -25,6 +30,9 @@ public class NettyServer {
                         //给pipeLine设置处理器
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
+                            // 可以使用一个集合管理SocketChannel，再推送消息时，可以将业务加入到各个channel
+                            // 对应的NioEventLoop 的taskQueue 或者  scheduleTashQueue
+                            System.out.println("客户socketchannel hashcode"+ch.hashCode());
                             ch.pipeline().addLast(new NettyServerHandler());
                         }
                     });     //给workergroup 的pipeline 设置处理器
