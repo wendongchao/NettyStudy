@@ -15,7 +15,7 @@ public class NIOFileChannel02 {
     public static void main(String[] args) throws Exception {
 
         //创建文件的输入流
-        File file = new File("d:\\file01.txt");
+        File file = new File("/Users/wendongchao/code/idea/NettyStudy/doc/file01.txt");
         FileInputStream fileInputStream = new FileInputStream(file);
 
         //通过 fileInputStream 获取对应的 FileChannel -> 实际类型 FileChannelImpl
