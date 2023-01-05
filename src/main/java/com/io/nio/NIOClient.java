@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 /**
  * 客户端
+ *
  * @Author wendongchao
  * @Date 2021/11/10 22:58
  */
@@ -20,8 +21,8 @@ public class NIOClient {
         //3、提供服务器的ip和端口
         InetSocketAddress inetSocketAddress = new InetSocketAddress("127.0.0.1", 6666);
         //4、链接服务器
-        if(!socketChannel.connect(inetSocketAddress)){
-            while (!socketChannel.finishConnect()){
+        if (!socketChannel.connect(inetSocketAddress)) {
+            while (!socketChannel.finishConnect()) {
                 System.out.println("链接需要时间，客户端不会阻塞");
             }
         }
@@ -30,7 +31,7 @@ public class NIOClient {
         Scanner scanner = new Scanner(System.in);
         String str;
         ByteBuffer buffer = ByteBuffer.allocate(1024);
-        while (scanner.hasNext()){
+        while (scanner.hasNext()) {
             str = scanner.next();
             System.out.println(str);
             buffer.put(str.getBytes());

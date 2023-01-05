@@ -10,6 +10,7 @@ import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
+
 /*
 客户端：
     连接服务器
@@ -23,12 +24,13 @@ public class GroupChatClient {
     private Selector selector;
     private SocketChannel socketChannel;
     private String username;
+
     // 构造器，完成初始化工作
     public GroupChatClient() throws IOException {
         // 获取Selector
         selector = Selector.open();
         // 连接服务器，获取SocketChannel
-        socketChannel = SocketChannel.open(new InetSocketAddress(host,port));
+        socketChannel = SocketChannel.open(new InetSocketAddress(host, port));
         // 设置非阻塞
         socketChannel.configureBlocking(false);
         // socketChannel注册到selector上，并设置OP_READ事件
@@ -39,14 +41,15 @@ public class GroupChatClient {
 
     /**
      * 向服务器发送消息
+     *
      * @param info
      */
-    public void SendInfo(String info){
+    public void SendInfo(String info) {
         info = username + ":    " + info;
         try {
             // buffer内容写入到通道
             socketChannel.write(ByteBuffer.wrap(info.getBytes()));
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -54,16 +57,16 @@ public class GroupChatClient {
     /**
      * 从服务器读取消息
      */
-    public void ReadInof(){
+    public void ReadInof() {
         try {
             int readChannel = selector.select();//如果没有事件就会阻塞再这里,所以当有事件发生时readchannel都不会小于0...
-            if(readChannel > 0){ // 有事件发生的通道
+            if (readChannel > 0) { // 有事件发生的通道
                 Iterator<SelectionKey> keyIterator = selector.selectedKeys().iterator();
                 //有可能多个通道同时发消息
-                while (keyIterator.hasNext()){
+                while (keyIterator.hasNext()) {
                     SelectionKey key = keyIterator.next();
                     //如果是可读事件
-                    if(key.isReadable()){ // 读事件
+                    if (key.isReadable()) { // 读事件
                         //得到相关通道
                         SocketChannel channel = (SocketChannel) key.channel();
                         ByteBuffer buffer = ByteBuffer.allocate(1024);
@@ -78,10 +81,10 @@ public class GroupChatClient {
                 ，selector中会有新的SelectionKey
                  */
                 keyIterator.remove();
-            }else {
+            } else {
                 System.out.println("没有可用的通道...");
             }
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -91,8 +94,8 @@ public class GroupChatClient {
         //启动客户端
         GroupChatClient chatClient = new GroupChatClient();
         //启动一个线程来操作
-        new Thread(()->{
-            while (true){
+        new Thread(() -> {
+            while (true) {
                 chatClient.ReadInof();
                 //每隔三秒读取一次服务端数据
                 try {
@@ -103,7 +106,7 @@ public class GroupChatClient {
             }
         }).start();
         Scanner scanner = new Scanner(System.in);
-        while (scanner.hasNext()){
+        while (scanner.hasNext()) {
             String str = scanner.next();
             chatClient.SendInfo(str);
         }
