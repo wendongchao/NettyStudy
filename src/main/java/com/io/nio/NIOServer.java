@@ -65,7 +65,7 @@ public class NIOServer {
                     buffer.clear();
                 }
             }
-            //及时将当前的SelectionKey,防止操作
+            //及时将当前的SelectionKey清除,防止操作
             Keyiterator.remove();
         }
     }

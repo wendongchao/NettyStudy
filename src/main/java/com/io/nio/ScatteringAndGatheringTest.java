@@ -18,7 +18,7 @@ public class ScatteringAndGatheringTest {
 
         //使用 ServerSocketChannel 和 SocketChannel 网络
         ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
-        InetSocketAddress inetSocketAddress = new InetSocketAddress(7000);
+        InetSocketAddress inetSocketAddress = new InetSocketAddress(6666);
 
         //绑定端口到 socket，并启动
         serverSocketChannel.socket().bind(inetSocketAddress);
@@ -43,6 +43,7 @@ public class ScatteringAndGatheringTest {
                 System.out.println("byteRead = " + byteRead);
                 //使用流打印,看看当前的这个 buffer 的 position 和 limit
                 Arrays.asList(byteBuffers).stream().map(buffer -> "position = " + buffer.position() + ", limit = " + buffer.limit()).forEach(System.out::println);
+                Arrays.asList(byteBuffers).stream().map(buffer -> new String(buffer.array())).forEach(System.out::println);
             }
 
             //将所有的 buffer 进行 flip
@@ -55,9 +56,7 @@ public class ScatteringAndGatheringTest {
             }
 
             //将所有的buffer进行clear
-            Arrays.asList(byteBuffers).forEach(buffer -> {
-                buffer.clear();
-            });
+            Arrays.asList(byteBuffers).forEach(buffer -> buffer.clear());
 
             System.out.println("byteRead = " + byteRead + ", byteWrite = " + byteWirte + ", messagelength = " + messageLength);
         }
