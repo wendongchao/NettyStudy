@@ -38,7 +38,7 @@ public class ScatteringAndGatheringTest {
             int byteRead = 0;
 
             while (byteRead < messageLength) {
-                long l = socketChannel.read(byteBuffers);
+                long l = socketChannel.read(byteBuffers);// 从channel读内容到buffer
                 byteRead += l; //累计读取的字节数
                 System.out.println("byteRead = " + byteRead);
                 //使用流打印,看看当前的这个 buffer 的 position 和 limit
@@ -51,7 +51,7 @@ public class ScatteringAndGatheringTest {
             //将数据读出显示到客户端
             long byteWirte = 0;
             while (byteWirte < messageLength) {
-                long l = socketChannel.write(byteBuffers);//
+                long l = socketChannel.write(byteBuffers);// 将buffer中的内容写到channel
                 byteWirte += l;
             }
 

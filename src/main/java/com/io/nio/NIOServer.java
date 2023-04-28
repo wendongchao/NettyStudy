@@ -60,7 +60,7 @@ public class NIOServer {
                     SocketChannel socketchannel = (SocketChannel) selectionKey.channel();
                     //获取与该channel关联的buffer，在和连接时就已经绑定了，(OP_READ事件注册时绑定了buffer)
                     ByteBuffer buffer = (ByteBuffer) selectionKey.attachment();
-                    //从客户端读到的数据
+                    //从客户端读到的数据，从通道中读取数据到buffer
                     socketchannel.read(buffer);
                     String str = new String(buffer.array());
                     System.out.println("from 客户端 : " + str);

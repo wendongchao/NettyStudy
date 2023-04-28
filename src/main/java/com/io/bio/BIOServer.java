@@ -26,7 +26,7 @@ public class BIOServer {
             //监听，等待客户端连接
             System.out.println("等待连接....");// 当没有客户端连接时，会一直监听端口
             // socket的accept方法会监听连接6666端口的客户端，连上后会生成一个socket对象，作为通信使用
-            final Socket socket = serverSocket.accept();
+            final Socket socket = serverSocket.accept();// 没有连接时accept会一直等待
             System.out.println("连接到一个客户端");
             //就创建一个线程，与之通讯(单独写一个方法)
             newCachedThreadPool.execute(new Runnable() {
