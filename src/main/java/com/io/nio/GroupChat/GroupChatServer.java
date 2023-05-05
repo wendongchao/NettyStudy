@@ -52,7 +52,7 @@ public class GroupChatServer {
                     while (keyIterator.hasNext()) {
                         SelectionKey key = keyIterator.next();
                         //判断key对应的事件
-                        if (key.isAcceptable()) {
+                        if (key.isAcceptable()) {// 连接事件
                             //通道为连接事件
                             AcceptEvent();
                         } else if (key.isReadable()) {
