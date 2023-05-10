@@ -14,6 +14,8 @@ import java.util.Date;
  * 这里的泛型指定的是接发数据的类型
  * 客户端到服务端，为入栈
  * 服务端到客户端，为出栈
+ * socket到服务端，客户端，为入栈
+ * 服务端，客户端到socket，为出栈
  */
 public class GroupChatServerHandler extends SimpleChannelInboundHandler<String> {
 

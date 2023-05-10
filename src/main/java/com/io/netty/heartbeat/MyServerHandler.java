@@ -8,6 +8,8 @@ import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 
 /**
+ * 适配器
+ * 入栈事件
  * @Author wendongchao
  * @Date 2021-12-26 16:39
  */

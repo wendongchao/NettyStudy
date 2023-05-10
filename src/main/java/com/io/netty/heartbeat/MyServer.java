@@ -28,7 +28,6 @@ public class MyServer {
         try {
 
             ServerBootstrap serverBootstrap = new ServerBootstrap();
-
             serverBootstrap.group(bossGroup,workGroup);
             serverBootstrap.channel(NioServerSocketChannel.class);
             serverBootstrap.handler(new LoggingHandler(LogLevel.INFO));

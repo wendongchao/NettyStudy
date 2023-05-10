@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
 public class NettyByteBuf01 {
-    public static void main(String[] args){
+    public static void main(String[] args) {
 
         //buf -> byte[10]           unlooped -》 非池化
         ByteBuf buf = Unpooled.buffer(10);
@@ -19,11 +19,16 @@ public class NettyByteBuf01 {
             // 直接获取buf位置的值输出，readerIndex的值不会改变
             System.out.println(buf.getByte(i));
         }
+        System.out.println("readerIndex=" + buf.readerIndex());
+        System.out.println("writerIndex=" + buf.writerIndex());
+        System.out.println("capacity=" + buf.capacity());
         for (int i = 0; i < buf.capacity(); i++) {
             // 使用buf自己的方法readByte, readerIndex会改变
             System.out.println(buf.readByte());
         }
 
-        buf.readerIndex();
+        System.out.println("readerIndex=" + buf.readerIndex());
+        System.out.println("writerIndex=" + buf.writerIndex());
+        System.out.println("capacity=" + buf.capacity());
     }
 }
